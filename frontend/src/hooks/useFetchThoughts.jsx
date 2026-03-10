@@ -16,16 +16,5 @@ export const useFetchThoughts = () => {
       thoughts, 
       setThoughts
    };
-
-
- /*  const addThought = (message) => {
-    const newToughtObject = {
-      _id: Date.now(),
-      message: message,
-      hearts: 0,
-      createdAt: new Date().toISOString()
-    };
-    setThoughts([newToughtObject, ...thoughts]);
-  }; */
 }
 
