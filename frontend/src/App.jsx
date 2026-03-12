@@ -1,15 +1,20 @@
 import { Routes, Route, Link } from 'react-router-dom';
 import { useFetchThoughts } from './hooks/useFetchThoughts';
 import { likeThought, postNewThought } from './api/thoughts';
+import { useState } from 'react';
 import ThoughtForm from './components/ThoughtForm'
 import ThoughtList from './components/ThoughtList'
 import About from './components/About';
+import LoginForm from './components/LoginForm';
 
 function App() {
 
   const {thoughts, setThoughts} = useFetchThoughts()
+    const [token, setToken] = useState(localStorage.getItem("token")); 
+
+
   const addThought = (message) => {
-    postNewThought(message)
+    postNewThought(message, token)
       .then((newThoughtFromApi) => {
         setThoughts([newThoughtFromApi, ...thoughts]);
       })
@@ -28,6 +33,19 @@ function App() {
     })
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    setToken(null);
+  };
+
+  if (!token) {
+  return (
+    <div className="max-w-md mx-auto px-1 mt-10">
+      <LoginForm onLogin={setToken} />
+    </div>
+  );
+}
+
   return (
     <div className="max-w-md mx-auto px-1">
       <Routes>
@@ -42,6 +60,13 @@ function App() {
               >
                 About this app
               </Link>
+              &nbsp;|&nbsp;
+              <button
+                onClick={handleLogout}
+                className="text-[#ff7a63ff] underline hover:text-red-900"
+              >
+                Log out
+              </button>
             </header>
             <ThoughtForm addThought={addThought} />
             <ThoughtList thoughts={thoughts}

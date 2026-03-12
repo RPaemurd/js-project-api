@@ -1,4 +1,5 @@
-const API_URL = 'https://happy-thoughts-api-4ful.onrender.com/thoughts';
+const API_URL = `${import.meta.env.VITE_API_URL}/api/thoughts`;
+console.log(import.meta.env.VITE_API_URL)
 
 export const fetchThoughts = async () => {
   const response = await fetch(API_URL);
@@ -6,10 +7,13 @@ export const fetchThoughts = async () => {
   return response.json();
 }; 
 
-export const postNewThought = async (message) => {
-  const response = await fetch(API_URL,{ 
+export const postNewThought = async (message, token) => {
+  const response = await fetch(API_URL,{
      method: 'POST',
-     headers: {'Content-Type': 'application/json'},
+     headers: {
+       'Content-Type': 'application/json',
+       'Authorization': `Bearer ${token}`
+     },
      body: JSON.stringify({ message: message })
   });
   if (!response.ok) throw new Error('Could not send the thought');

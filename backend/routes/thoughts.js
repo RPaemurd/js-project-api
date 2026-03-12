@@ -1,6 +1,6 @@
 import express from "express";
-import Thought from "../models/Thought";
-import authenticate from "../middleware/authenticate";
+import Thought from "../models/Thought.js";
+import authenticate from "../middleware/authenticate.js";
 
 /* 
 POST   /thoughts/:id/like → gilla tanke (öppen)  */
@@ -89,11 +89,21 @@ router.post("/thoughts/:id/like", async (req, res ) => {
 
     try { 
     const thought = await Thought.findByIdAndUpdate(
+
         req.params.id,
         { $inc: { hearts: 1 } }, // $inc = increment, ökar med 1
         { new: true } 
-    )} catch {
-        
+    );
+
+    if (!thought){
+            return res.status(404).json({ error: "Thought not found"});
+        }
+
+        res.status(200).json(thought)
+    } catch {
+        res.status(400).json({ error: "Could not like thought"})
     }
 
-})
+});
+
+export default router; 

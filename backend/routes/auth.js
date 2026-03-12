@@ -7,7 +7,7 @@ Server verifies token, does not need to remember anything */
 
 import express from "express";
 import bcrypt from "bcrypt";
-import User from "../models/User";
+import User from "../models/User.js";
 import jwt from "jsonwebtoken";
 
 const router = express.Router();
