@@ -1,10 +1,3 @@
-/* User logs in 
-Server creates a token with user ID
-Server sends back the token to frontend
-Frontend saves the token (ex localStorage) 
-At next request frontend sends token manually
-Server verifies token, does not need to remember anything */
-
 import express from "express";
 import bcrypt from "bcrypt";
 import User from "../models/User.js";

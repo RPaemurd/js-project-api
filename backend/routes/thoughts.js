@@ -2,9 +2,6 @@ import express from "express";
 import Thought from "../models/Thought.js";
 import authenticate from "../middleware/authenticate.js";
 
-/* 
-POST   /thoughts/:id/like → gilla tanke (öppen)  */
-
 const router = express.Router()
 
 router.get("/thoughts", async (req, res) => {
@@ -91,7 +88,7 @@ router.post("/thoughts/:id/like", async (req, res ) => {
     const thought = await Thought.findByIdAndUpdate(
 
         req.params.id,
-        { $inc: { hearts: 1 } }, // $inc = increment, ökar med 1
+        { $inc: { hearts: 1 } }, 
         { new: true } 
     );
 

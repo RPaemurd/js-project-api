@@ -1,4 +1,3 @@
-/* middleware is a function that runs between an incoming request and the responding router, like a guard at the door */
 
 /* Request kommer in
        ↓
