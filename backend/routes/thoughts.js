@@ -6,7 +6,7 @@ const router = express.Router()
 
 router.get("/thoughts", async (req, res) => {
  try{ 
-    const thoughts = await Thought.find()
+    const thoughts = await Thought.find().sort({ createdAt: -1 })
     res.status(200).json(thoughts);
 } catch (err){ 
     res.status(400).json({ message: "Could not get thoughts"})
