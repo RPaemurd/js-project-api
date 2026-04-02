@@ -1,6 +1,6 @@
 import { Routes, Route, Link } from 'react-router-dom';
 import { useFetchThoughts } from './hooks/useFetchThoughts';
-import { likeThought, postNewThought } from './api/thoughts';
+import { likeThought, postNewThought, updateThought, deleteThought } from './api/thoughts';
 import { useState } from 'react';
 import ThoughtForm from './components/ThoughtForm'
 import ThoughtList from './components/ThoughtList'
@@ -10,7 +10,8 @@ import LoginForm from './components/LoginForm';
 function App() {
 
   const {thoughts, setThoughts} = useFetchThoughts()
-    const [token, setToken] = useState(localStorage.getItem("token")); 
+  const [token, setToken] = useState(localStorage.getItem("token"));
+  const currentUserId = token ? JSON.parse(atob(token.split('.')[1])).userId : null;
 
 
   const addThought = (message) => {
@@ -21,6 +22,22 @@ function App() {
       .catch((error) => {
         console.error("Could not post the new thought:", error);
       });
+  };
+
+  const handleEdit = (id, message) => {
+    updateThought(id, message, token)
+      .then((updated) => {
+        setThoughts(thoughts.map(t => t._id === updated._id ? updated : t));
+      })
+      .catch(err => console.error("Could not update thought:", err));
+  };
+
+  const handleDelete = (id) => {
+    deleteThought(id, token)
+      .then(() => {
+        setThoughts(thoughts.filter(t => t._id !== id));
+      })
+      .catch(err => console.error("Could not delete thought:", err));
   };
 
   const handleLike = (id) => {
@@ -70,7 +87,10 @@ function App() {
             </header>
             <ThoughtForm addThought={addThought} />
             <ThoughtList thoughts={thoughts}
-            onLike={handleLike} />
+            onLike={handleLike}
+            onEdit={handleEdit}
+            onDelete={handleDelete}
+            currentUserId={currentUserId} />
             
           </>
         } />
